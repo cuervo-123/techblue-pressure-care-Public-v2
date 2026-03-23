@@ -1,0 +1,2117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tech Blue Pressure Care v2 Secure Ultra</title>
+  <style>
+    :root{
+      --bg1:#06101d;
+      --bg2:#0b1830;
+      --panel:#0f1c33;
+      --panel2:#132544;
+      --line:#22456f;
+      --text:#eef6ff;
+      --muted:#9fc2ea;
+      --accent:#38bdf8;
+      --good:#16a34a;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --info:#2563eb;
+      --shadow:0 10px 30px rgba(0,0,0,.28);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:Arial,Helvetica,sans-serif;
+      color:var(--text);
+      background:linear-gradient(180deg,var(--bg1),var(--bg2) 55%,#071322);
+      min-height:100vh;
+    }
+
+    .wrap{
+      max-width:1280px;
+      margin:0 auto;
+      padding:18px;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,rgba(56,189,248,.15),rgba(37,99,235,.12));
+      border:1px solid rgba(56,189,248,.25);
+      border-radius:24px;
+      padding:20px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
+
+    .hero h1{
+      margin:0 0 8px;
+      color:#7dd3fc;
+      font-size:clamp(28px,4vw,44px);
+    }
+
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.5;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:18px;
+    }
+
+    .card{
+      background:rgba(15,28,51,.96);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .card h2{
+      margin:0 0 14px;
+      font-size:22px;
+      color:#dff3ff;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .row3{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:12px;
+    }
+
+    .field label{
+      display:block;
+      margin:0 0 8px;
+      color:var(--muted);
+      font-weight:700;
+      font-size:14px;
+    }
+
+    .field input,
+    .field select{
+      width:100%;
+      padding:16px 14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#091525;
+      color:var(--text);
+      font-size:20px;
+      outline:none;
+    }
+
+    .field input:focus,
+    .field select:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(56,189,248,.16);
+    }
+
+    .btns{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    button{
+      border:none;
+      border-radius:14px;
+      padding:14px 16px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      color:white;
+      box-shadow:var(--shadow);
+    }
+
+    .primary{background:linear-gradient(135deg,#0ea5e9,#2563eb)}
+    .green{background:linear-gradient(135deg,#15803d,#22c55e)}
+    .orange{background:linear-gradient(135deg,#d97706,#f59e0b)}
+    .red{background:linear-gradient(135deg,#dc2626,#ef4444)}
+    .gray{background:linear-gradient(135deg,#334155,#475569)}
+    .violet{background:linear-gradient(135deg,#6d28d9,#8b5cf6)}
+
+    .hospital{
+      margin-top:16px;
+      border-radius:20px;
+      padding:22px;
+      border:2px solid rgba(255,255,255,.08);
+      background:#0a1628;
+      text-align:center;
+      transition:.25s ease;
+    }
+
+    .hospital .badge{
+      display:inline-block;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:800;
+      margin-bottom:12px;
+      letter-spacing:.4px;
+    }
+
+    .hospital .reading{
+      font-size:clamp(30px,5vw,56px);
+      font-weight:900;
+      margin:8px 0;
+    }
+
+    .hospital .msg{
+      font-size:18px;
+      line-height:1.5;
+      color:#e5eefc;
+    }
+
+    .hospital.good{background:linear-gradient(180deg,rgba(22,163,74,.18),rgba(10,22,40,.98)); border-color:rgba(34,197,94,.42)}
+    .hospital.warn{background:linear-gradient(180deg,rgba(245,158,11,.18),rgba(10,22,40,.98)); border-color:rgba(245,158,11,.42)}
+    .hospital.bad{background:linear-gradient(180deg,rgba(239,68,68,.22),rgba(10,22,40,.98)); border-color:rgba(239,68,68,.42)}
+    .hospital.info{background:linear-gradient(180deg,rgba(37,99,235,.18),rgba(10,22,40,.98)); border-color:rgba(37,99,235,.42)}
+
+    .badge.good{background:rgba(34,197,94,.16);color:#86efac}
+    .badge.warn{background:rgba(245,158,11,.16);color:#fcd34d}
+    .badge.bad{background:rgba(239,68,68,.16);color:#fecaca}
+    .badge.info{background:rgba(56,189,248,.16);color:#7dd3fc}
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .stat{
+      background:#0a1628;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      text-align:center;
+    }
+
+    .stat .n{
+      font-size:26px;
+      font-weight:900;
+      color:#7dd3fc;
+      margin-bottom:5px;
+    }
+
+    .stat .t{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .chartWrap{
+      margin-top:16px;
+      background:#0a1628;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px;
+    }
+
+    canvas{
+      width:100%;
+      height:300px;
+      display:block;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border-radius:12px;
+    }
+
+    .mini{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+      margin-top:10px;
+    }
+
+    .historyBox{
+      margin-top:18px;
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:16px;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:860px;
+      background:#0a1628;
+    }
+
+    th,td{
+      padding:12px 10px;
+      border-bottom:1px solid #183252;
+      text-align:center;
+      font-size:14px;
+    }
+
+    th{
+      position:sticky;
+      top:0;
+      background:#0d1a2f;
+      color:#dbeeff;
+      z-index:1;
+    }
+
+    tr:nth-child(even){background:rgba(255,255,255,.02)}
+
+    .pill{
+      display:inline-block;
+      padding:7px 10px;
+      border-radius:999px;
+      font-weight:800;
+      font-size:12px;
+    }
+
+    .pill.good{background:rgba(22,163,74,.16);color:#86efac}
+    .pill.warn{background:rgba(245,158,11,.16);color:#fcd34d}
+    .pill.bad{background:rgba(239,68,68,.16);color:#fecaca}
+    .pill.info{background:rgba(37,99,235,.16);color:#93c5fd}
+
+    .footerNote{
+      margin-top:16px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .symptoms{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .symptoms label{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      background:#0a1628;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      cursor:pointer;
+      font-size:14px;
+      color:#dbeafe;
+    }
+
+    .topTools{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      margin-bottom:12px;
+    }
+
+    .aiBox{
+      margin-top:16px;
+      padding:16px;
+      border-radius:16px;
+      background:#091524;
+      border:1px solid var(--line);
+    }
+
+    .aiBox h3{
+      margin:0 0 8px;
+      color:#7dd3fc;
+      font-size:18px;
+    }
+
+    .aiLine{
+      color:#dbeafe;
+      margin:8px 0;
+      line-height:1.5;
+      font-size:15px;
+    }
+
+    .securityOverlay,
+    .familyOverlay{
+      position:fixed;
+      inset:0;
+      background:rgba(2,8,23,.9);
+      backdrop-filter:blur(8px);
+      z-index:9999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .securityCard,
+    .familyCard{
+      width:min(720px,100%);
+      background:rgba(15,28,51,.98);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+
+    .securityCard h2,
+    .familyCard h2{
+      margin:0 0 10px;
+      color:#7dd3fc;
+      font-size:28px;
+    }
+
+    .securityCard p,
+    .familyCard p{
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .securityCard input{
+      width:100%;
+      padding:16px 14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#091525;
+      color:var(--text);
+      font-size:18px;
+      margin-top:10px;
+    }
+
+    .securityActions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .statusStrip{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .stripCard{
+      background:#0a1628;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .stripCard b{
+      display:block;
+      color:#7dd3fc;
+      margin-bottom:6px;
+    }
+
+    .notice{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:12px;
+      background:rgba(37,99,235,.14);
+      border:1px solid rgba(56,189,248,.3);
+      color:#dbeafe;
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .familyTools{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      margin:14px 0 18px;
+    }
+
+    .familyTools input{
+      width:100%;
+      padding:14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#091525;
+      color:var(--text);
+      font-size:16px;
+    }
+
+    .familyList{
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+      max-height:380px;
+      overflow:auto;
+    }
+
+    .familyItem{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:10px;
+      align-items:center;
+      background:#0a1628;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .familyName{
+      font-weight:800;
+      color:#dbeeff;
+    }
+
+    .familyTag{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:4px;
+    }
+
+    .familyActions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+
+    .foodGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .foodHint{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .dietGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+
+    .dietBox{
+      background:#091524;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+    }
+
+    .dietBox h3{
+      margin:0 0 10px;
+      color:#7dd3fc;
+      font-size:18px;
+    }
+
+    .dietList{
+      margin:0;
+      padding-left:18px;
+      color:#dbeafe;
+      line-height:1.55;
+      font-size:14px;
+    }
+
+    .dietList li{ margin:6px 0; }
+
+    .planDay{
+      background:#0a1628;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      margin-top:10px;
+    }
+
+    .planDay b{
+      display:block;
+      color:#7dd3fc;
+      margin-bottom:6px;
+    }
+
+    .foodHistoryBox{
+      margin-top:18px;
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:16px;
+    }
+
+    .hidden{display:none!important}
+
+    @media (max-width:960px){
+      .grid{grid-template-columns:1fr}
+      .row,.row3,.stats,.symptoms,.statusStrip,.securityActions,.familyTools{grid-template-columns:1fr}
+      .topTools{justify-content:flex-start}
+      .familyItem{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div id="securityOverlay" class="securityOverlay">
+    <div class="securityCard">
+      <h2 id="securityTitle">🔐 Seguridad</h2>
+      <p id="securityText">Configura el acceso seguro de la app.</p>
+
+      <div id="setupBox">
+        <input id="ownerName" type="text" placeholder="Nombre del responsable (ej: Julian)">
+        <input id="pin1" type="password" inputmode="numeric" placeholder="Crear PIN de 4 a 8 dígitos">
+        <input id="pin2" type="password" inputmode="numeric" placeholder="Confirmar PIN">
+        <div class="securityActions">
+          <button class="primary" onclick="crearSeguridad()">Crear acceso</button>
+          <button class="gray" onclick="demoSeguridad()">Demo rápida</button>
+        </div>
+      </div>
+
+      <div id="unlockBox" class="hidden">
+        <input id="unlockName" type="text" placeholder="Responsable" readonly>
+        <input id="unlockPin" type="password" inputmode="numeric" placeholder="Ingrese PIN">
+        <div class="securityActions">
+          <button class="primary" onclick="desbloquear()">Entrar</button>
+          <button class="orange" onclick="cambiarPin()">Cambiar PIN</button>
+        </div>
+      </div>
+
+      <div class="notice">
+        Esta seguridad protege el acceso local de la app.
+      </div>
+    </div>
+  </div>
+
+  <div id="familyOverlay" class="familyOverlay hidden">
+    <div class="familyCard">
+      <h2>👨‍👩‍👧 Gestionar familiares</h2>
+      <p>Aquí puedes agregar, editar o eliminar nombres guardados.</p>
+
+      <div class="familyTools">
+        <input id="familyManagerInput" type="text" placeholder="Escribe un nuevo nombre">
+        <button class="primary" onclick="agregarDesdeGestor()">➕ Agregar</button>
+      </div>
+
+      <div id="familyList" class="familyList"></div>
+
+      <div class="btns" style="margin-top:18px">
+        <button class="gray" onclick="cerrarGestorFamilia()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section class="hero">
+      <div class="topTools">
+        <button class="gray" onclick="toggleVoice()"><span id="voiceBtnText">🔊 Voz: ON</span></button>
+        <button class="gray" onclick="pedirNotificaciones()"><span id="notifyBtnText">🔔 Notificaciones</span></button>
+        <button class="gray" onclick="toggleLock()">🔐 Bloquear</button>
+        <button class="gray" onclick="abrirGestorFamilia()">👨‍👩‍👧 Gestionar familiares</button>
+        <button class="gray" onclick="exportarJSON()">⬇️ Exportar JSON</button>
+        <button class="gray" onclick="importarJSON()">⬆️ Importar JSON</button>
+      </div>
+      <h1>🩺 Tech Blue Pressure Care v2 Secure Ultra</h1>
+      <p>
+        Base estable V2 + seguridad local + IA de patrones + notificaciones del navegador +
+        gráfica tipo hospital real.
+      </p>
+
+      <div class="statusStrip">
+        <div class="stripCard">
+          <b>Responsable</b>
+          <span id="ownerLabel">-</span>
+        </div>
+        <div class="stripCard">
+          <b>Sync local</b>
+          <span id="syncLabel">Activo entre pestañas</span>
+        </div>
+        <div class="stripCard">
+          <b>Familiares</b>
+          <span id="familyCountLabel">3</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Registrar lectura</h2>
+
+        <div class="row">
+          <div class="field">
+            <label>Persona</label>
+            <select id="persona" onchange="toggleNuevoFamiliarField()">
+              <option value="Mamá">Mamá</option>
+              <option value="Tía Gladys">Tía Gladys</option>
+              <option value="Otro familiar">Otro familiar</option>
+              <option value="__nuevo__">➕ Nuevo familiar</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Edad</label>
+            <input id="edad" type="number" min="1" max="120" placeholder="Ej: 75">
+          </div>
+        </div>
+
+        <div id="nuevoFamiliarWrap" class="field hidden">
+          <label>Nombre del nuevo familiar</label>
+          <input id="nuevoFamiliar" type="text" placeholder="Ej: Tío Carlos">
+        </div>
+
+        <div class="row3">
+          <div class="field">
+            <label>SYS (Presión alta)</label>
+            <input id="sys" type="number" placeholder="Ej: 137">
+          </div>
+          <div class="field">
+            <label>DIA (Presión baja)</label>
+            <input id="dia" type="number" placeholder="Ej: 63">
+          </div>
+          <div class="field">
+            <label>Pulso</label>
+            <input id="pul" type="number" placeholder="Ej: 61">
+          </div>
+        </div>
+
+        <div class="foodGrid">
+          <div class="field">
+            <label>Qué comió</label>
+            <input id="comida" type="text" placeholder="Ej: frijoles, arepa, chocolate">
+          </div>
+          <div class="field">
+            <label>Jugo o bebida</label>
+            <input id="jugo" type="text" placeholder="Ej: zanahoria + remolacha">
+          </div>
+        </div>
+        <div class="foodHint">
+          Puedes registrar la comida al mismo tiempo que la presión. Esto ayuda a la IA a detectar si el azúcar,
+          la sal o ciertos alimentos pudieron influir en la lectura.
+        </div>
+
+        <div class="symptoms">
+          <label><input type="checkbox" value="Mareo" class="symptom"> Mareo</label>
+          <label><input type="checkbox" value="Dolor de cabeza" class="symptom"> Dolor de cabeza</label>
+          <label><input type="checkbox" value="Visión borrosa" class="symptom"> Visión borrosa</label>
+          <label><input type="checkbox" value="Sin síntomas" class="symptom symptom-none"> Sin síntomas</label>
+        </div>
+
+        <div class="btns">
+          <button class="primary" onclick="procesarLectura()">📊 Procesar lectura</button>
+          <button class="green" onclick="guardarComidaManual()">🍽️ Guardar comida</button>
+          <button class="green" onclick="usarEjemploMama()">👵 Ejemplo Mamá</button>
+          <button class="orange" onclick="usarEjemploTia()">👵 Ejemplo Tía</button>
+          <button class="violet" onclick="notificarUltimaLectura()">📲 Notificar lectura</button>
+          <button class="gray" onclick="resetPlanMama()">🔄 Reset plan Mamá</button>
+          <button class="red" onclick="borrarTodo()">🗑️ Borrar historial</button>
+        </div>
+
+        <div id="hospitalBox" class="hospital info">
+          <div id="estadoBadge" class="badge info">ESPERANDO DATOS</div>
+          <div id="readingText" class="reading">-- / -- / --</div>
+          <div id="messageText" class="msg">Ingrese los datos del brazalete para analizar la lectura.</div>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div id="avgSys" class="n">0</div>
+            <div class="t">Promedio SYS</div>
+          </div>
+          <div class="stat">
+            <div id="avgDia" class="n">0</div>
+            <div class="t">Promedio DIA</div>
+          </div>
+          <div class="stat">
+            <div id="avgPul" class="n">0</div>
+            <div class="t">Promedio Pulso</div>
+          </div>
+          <div class="stat">
+            <div id="countReads" class="n">0</div>
+            <div class="t">Lecturas</div>
+          </div>
+        </div>
+
+        <div class="aiBox">
+          <h3>🤖 Doctor AI Familiar</h3>
+          <div id="aiSummary" class="aiLine">Aún no hay suficientes lecturas para detectar patrones.</div>
+          <div id="aiTrend" class="aiLine">Tendencia: pendiente.</div>
+          <div id="aiRisk" class="aiLine">Riesgo actual: pendiente.</div>
+        </div>
+
+        <div class="dietGrid">
+          <div class="dietBox">
+            <h3>🍽️ IA comida y presión</h3>
+            <div id="foodAISummary" class="aiLine">Todavía no hay suficientes registros de comida.</div>
+            <div id="foodAIAdvice" class="aiLine">Recomendación: pendiente.</div>
+            <div id="foodAIAlert" class="aiLine">Alerta diaria: pendiente.</div>
+          </div>
+
+          <div class="dietBox">
+            <h3>🫀 Plan Mamá · ciclo 3 días</h3>
+            <div id="planMamaWrap">
+              <div class="planDay"><b>Día actual</b><span id="planMamaDay">Pendiente</span></div>
+              <div class="planDay"><b>Desayuno</b><span id="planMamaBreakfast">Pendiente</span></div>
+              <div class="planDay"><b>Almuerzo</b><span id="planMamaLunch">Pendiente</span></div>
+              <div class="planDay"><b>Cena</b><span id="planMamaDinner">Pendiente</span></div>
+              <div class="planDay"><b>Jugo</b><span id="planMamaJuice">Pendiente</span></div>
+            </div>
+            <div class="foodHint">El ciclo se reinicia manualmente cada vez que vuelvan a cocinar.</div>
+          </div>
+        </div>
+
+        <div class="dietBox" style="margin-top:18px">
+          <h3>✅ Alimentos que se quedan / ⚠️ cambios sugeridos</h3>
+          <ul class="dietList">
+            <li><b>Se quedan:</b> salmón, pollo, atún en agua, acelga, brócoli, espinaca, zucchini, pepino, lechuga, repollo, papaya, piña, guayaba, guanábana, tomate de árbol, zanahoria, remolacha, linaza, aceite de oliva, frijoles con poca sal.</li>
+            <li><b>Moderados:</b> arroz normal, papa, maduros, plátano verde, arepa de maíz, pan, carne de res, hígado.</li>
+            <li><b>Reducir:</b> chocolate con leche, café con leche repetido, aguapanela con leche, dulce, exceso de sal, enlatados salados, fritos y porciones grandes de pan o galletas.</li>
+            <li><b>Reemplazar:</b> M&amp;M’s o chocolatines → fruta o porción pequeña de chocolate oscuro; café repetido → 1 taza al día; jugos con azúcar → sin azúcar; atún → preferir en agua y enjuagar si viene salado.</li>
+          </ul>
+        </div>
+
+        <div class="footerNote">
+          Esta app es de apoyo familiar. No reemplaza el criterio médico.
+          Si hay dolor de pecho, falta de aire, desmayo, confusión, debilidad fuerte
+          o una lectura muy alta repetida, buscar ayuda médica.
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Gráfica hospital real</h2>
+
+        <div class="row">
+          <div class="field">
+            <label>Ver gráfica de</label>
+            <select id="filtroPersona" onchange="renderTodo()">
+              <option value="TODOS">Todos</option>
+              <option value="Mamá">Mamá</option>
+              <option value="Tía Gladys">Tía Gladys</option>
+              <option value="Otro familiar">Otro familiar</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Últimas lecturas</label>
+            <select id="limitGraph" onchange="renderTodo()">
+              <option value="12">12</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="chartWrap">
+          <canvas id="chart" width="960" height="300"></canvas>
+        </div>
+
+        <div class="mini">
+          Bandas visuales:
+          verde = estable,
+          amarillo = vigilar,
+          rojo = alerta.
+          Líneas: SYS, DIA y Pulso.
+        </div>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:18px">
+      <h2>Historial</h2>
+      <div class="historyBox">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Persona</th>
+              <th>Edad</th>
+              <th>SYS</th>
+              <th>DIA</th>
+              <th>Pulso</th>
+              <th>Síntomas</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tablaHistorial">
+            <tr><td colspan="9">Sin registros</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+    <section class="card" style="margin-top:18px">
+      <h2>Historial de comida y bebidas</h2>
+      <div class="foodHistoryBox">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Persona</th>
+              <th>Comida</th>
+              <th>Jugo / bebida</th>
+              <th>Señales detectadas</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tablaComidas">
+            <tr><td colspan="6">Sin registros</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  <script>
+    const STORAGE_KEY = "techblue_pressure_care_v2_secure_ultra_data";
+    const SECURITY_KEY = "techblue_pressure_care_v2_secure_ultra_security";
+    const SESSION_KEY = "techblue_pressure_care_v2_secure_ultra_session";
+    const CHANNEL_NAME = "tbpc_live_sync_channel_v2_ultra";
+    const FAMILY_KEY = "techblue_pressure_care_v2_family_list";
+    const FOOD_KEY = "techblue_pressure_care_v2_food_log";
+    const PLAN_KEY = "techblue_pressure_care_v2_plan_mama_start";
+
+    let voiceEnabled = true;
+    let channel = null;
+
+    const symptomBoxes = () => Array.from(document.querySelectorAll(".symptom"));
+    const symptomNone = () => document.querySelector(".symptom-none");
+
+    symptomBoxes().forEach(box => {
+      box.addEventListener("change", (e) => {
+        if (e.target.classList.contains("symptom-none") && e.target.checked) {
+          symptomBoxes().forEach(x => { if (x !== e.target) x.checked = false; });
+        } else if (!e.target.classList.contains("symptom-none") && e.target.checked) {
+          symptomNone().checked = false;
+        }
+      });
+    });
+
+    function getFamilies(){
+      try{
+        const saved = JSON.parse(localStorage.getItem(FAMILY_KEY));
+        if(Array.isArray(saved) && saved.length){
+          return saved;
+        }
+      }catch(e){}
+      return ["Mamá", "Tía Gladys", "Otro familiar"];
+    }
+
+    function setFamilies(list){
+      localStorage.setItem(FAMILY_KEY, JSON.stringify(list));
+    }
+
+    function normalizeName(name){
+      return String(name || "").trim().replace(/\s+/g, " ");
+    }
+
+    function addFamily(name){
+      const clean = normalizeName(name);
+      if(!clean) return null;
+
+      const families = getFamilies();
+      const exists = families.some(f => f.toLowerCase() === clean.toLowerCase());
+
+      if(!exists){
+        families.push(clean);
+        setFamilies(families);
+      }
+
+      renderFamilySelects(clean);
+      renderFamilyManager();
+      return clean;
+    }
+
+    function renameFamily(oldName, newName){
+      const cleanOld = normalizeName(oldName);
+      const cleanNew = normalizeName(newName);
+
+      if(!cleanOld || !cleanNew) return;
+      if(cleanOld === cleanNew) return;
+
+      const families = getFamilies();
+      const protectedNames = ["Mamá", "Tía Gladys", "Otro familiar"];
+      const alreadyExists = families.some(f => f.toLowerCase() === cleanNew.toLowerCase());
+
+      if(alreadyExists){
+        alert("Ese nombre ya existe.");
+        return;
+      }
+
+      const idx = families.findIndex(f => f === cleanOld);
+      if(idx === -1) return;
+
+      families[idx] = cleanNew;
+      setFamilies(families);
+
+      const data = getData().map(r => {
+        if(r.persona === cleanOld){
+          return { ...r, persona: cleanNew };
+        }
+        return r;
+      });
+      setData(data);
+
+      renderFamilySelects(cleanNew);
+      renderFamilyManager();
+      renderTodo();
+    }
+
+    function deleteFamily(name){
+      const clean = normalizeName(name);
+      const protectedNames = ["Mamá", "Tía Gladys", "Otro familiar"];
+
+      if(protectedNames.includes(clean)){
+        alert("Ese familiar base no se puede eliminar.");
+        return;
+      }
+
+      const ok = confirm(`¿Eliminar a "${clean}"?\n\nSus lecturas pasarán a "Otro familiar".`);
+      if(!ok) return;
+
+      let families = getFamilies().filter(f => f !== clean);
+      if(!families.includes("Otro familiar")) families.push("Otro familiar");
+      setFamilies(families);
+
+      const data = getData().map(r => {
+        if(r.persona === clean){
+          return { ...r, persona: "Otro familiar" };
+        }
+        return r;
+      });
+      setData(data);
+
+      renderFamilySelects("Otro familiar");
+      renderFamilyManager();
+      renderTodo();
+    }
+
+    function renderFamilyManager(){
+      const list = document.getElementById("familyList");
+      if(!list) return;
+
+      const families = getFamilies();
+      const protectedNames = ["Mamá", "Tía Gladys", "Otro familiar"];
+
+      list.innerHTML = families.map(name => {
+        const protectedTag = protectedNames.includes(name)
+          ? `<div class="familyTag">Base protegida</div>`
+          : `<div class="familyTag">Editable y eliminable</div>`;
+
+        const actionButtons = protectedNames.includes(name)
+          ? `<button class="gray" onclick="editarFamilia('${escapeQuotes(name)}')">✏️ Editar</button>`
+          : `
+            <button class="orange" onclick="editarFamilia('${escapeQuotes(name)}')">✏️ Editar</button>
+            <button class="red" onclick="deleteFamily('${escapeQuotes(name)}')">🗑️ Eliminar</button>
+          `;
+
+        return `
+          <div class="familyItem">
+            <div>
+              <div class="familyName">${name}</div>
+              ${protectedTag}
+            </div>
+            <div class="familyActions">
+              ${actionButtons}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function escapeQuotes(str){
+      return String(str).replace(/'/g, "\\'");
+    }
+
+    function abrirGestorFamilia(){
+      document.getElementById("familyOverlay").classList.remove("hidden");
+      renderFamilyManager();
+    }
+
+    function cerrarGestorFamilia(){
+      document.getElementById("familyOverlay").classList.add("hidden");
+      document.getElementById("familyManagerInput").value = "";
+    }
+
+    function agregarDesdeGestor(){
+      const input = document.getElementById("familyManagerInput");
+      const name = normalizeName(input.value);
+      if(!name){
+        alert("Escribe un nombre.");
+        return;
+      }
+      const added = addFamily(name);
+      if(added){
+        input.value = "";
+        renderTodo();
+      }
+    }
+
+    function editarFamilia(oldName){
+      const newName = prompt(`Editar nombre de "${oldName}"`, oldName);
+      if(newName === null) return;
+      const cleanNew = normalizeName(newName);
+      if(!cleanNew){
+        alert("El nombre no puede estar vacío.");
+        return;
+      }
+      renameFamily(oldName, cleanNew);
+    }
+
+    function renderFamilySelects(selectedName = null){
+      const families = getFamilies();
+      const personaSelect = document.getElementById("persona");
+      const filtroSelect = document.getElementById("filtroPersona");
+
+      const previousPersona = selectedName || personaSelect.value || "Mamá";
+      const previousFiltro = filtroSelect.value || "TODOS";
+
+      personaSelect.innerHTML = "";
+      families.forEach(name => {
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.textContent = name;
+        personaSelect.appendChild(opt);
+      });
+
+      const newOpt = document.createElement("option");
+      newOpt.value = "__nuevo__";
+      newOpt.textContent = "➕ Nuevo familiar";
+      personaSelect.appendChild(newOpt);
+
+      filtroSelect.innerHTML = `<option value="TODOS">Todos</option>`;
+      families.forEach(name => {
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.textContent = name;
+        filtroSelect.appendChild(opt);
+      });
+
+      const personaExists = families.some(f => f === previousPersona);
+      personaSelect.value = personaExists ? previousPersona : "Mamá";
+
+      const filtroExists = previousFiltro === "TODOS" || families.some(f => f === previousFiltro);
+      filtroSelect.value = filtroExists ? previousFiltro : "TODOS";
+
+      document.getElementById("familyCountLabel").textContent = families.length;
+      toggleNuevoFamiliarField();
+    }
+
+    function toggleNuevoFamiliarField(){
+      const persona = document.getElementById("persona").value;
+      const wrap = document.getElementById("nuevoFamiliarWrap");
+      if(persona === "__nuevo__"){
+        wrap.classList.remove("hidden");
+      } else {
+        wrap.classList.add("hidden");
+        document.getElementById("nuevoFamiliar").value = "";
+      }
+    }
+
+    function hashPin(pin){
+      let hash = 0;
+      for(let i = 0; i < pin.length; i++){
+        hash = ((hash << 5) - hash) + pin.charCodeAt(i);
+        hash |= 0;
+      }
+      return String(hash);
+    }
+
+    function getSecurity(){
+      try{
+        return JSON.parse(localStorage.getItem(SECURITY_KEY)) || null;
+      }catch(e){
+        return null;
+      }
+    }
+
+    function setSecurity(data){
+      localStorage.setItem(SECURITY_KEY, JSON.stringify(data));
+    }
+
+    function getSession(){
+      return localStorage.getItem(SESSION_KEY) === "1";
+    }
+
+    function setSession(value){
+      localStorage.setItem(SESSION_KEY, value ? "1" : "0");
+    }
+
+    function initSecurity(){
+      const sec = getSecurity();
+      const overlay = document.getElementById("securityOverlay");
+      const setupBox = document.getElementById("setupBox");
+      const unlockBox = document.getElementById("unlockBox");
+
+      if(!sec){
+        document.getElementById("securityTitle").textContent = "🔐 Crear acceso";
+        document.getElementById("securityText").textContent = "Crea un nombre y un PIN para proteger la app.";
+        setupBox.classList.remove("hidden");
+        unlockBox.classList.add("hidden");
+        overlay.classList.remove("hidden");
+        return;
+      }
+
+      document.getElementById("ownerLabel").textContent = sec.owner;
+      document.getElementById("unlockName").value = sec.owner;
+      setupBox.classList.add("hidden");
+      unlockBox.classList.remove("hidden");
+
+      if(getSession()){
+        overlay.classList.add("hidden");
+      }else{
+        document.getElementById("securityTitle").textContent = "🔓 Desbloquear";
+        document.getElementById("securityText").textContent = "Ingrese el PIN para entrar.";
+        overlay.classList.remove("hidden");
+      }
+    }
+
+    function crearSeguridad(){
+      const owner = document.getElementById("ownerName").value.trim();
+      const pin1 = document.getElementById("pin1").value.trim();
+      const pin2 = document.getElementById("pin2").value.trim();
+
+      if(!owner){
+        alert("Escribe el nombre del responsable.");
+        return;
+      }
+
+      if(!/^[0-9]{4,8}$/.test(pin1)){
+        alert("El PIN debe tener entre 4 y 8 dígitos.");
+        return;
+      }
+
+      if(pin1 !== pin2){
+        alert("Los PIN no coinciden.");
+        return;
+      }
+
+      setSecurity({
+        owner,
+        pinHash: hashPin(pin1),
+        createdAt: new Date().toISOString()
+      });
+
+      setSession(true);
+      document.getElementById("ownerLabel").textContent = owner;
+      document.getElementById("securityOverlay").classList.add("hidden");
+      initSecurity();
+    }
+
+    function demoSeguridad(){
+      document.getElementById("ownerName").value = "Julian";
+      document.getElementById("pin1").value = "1234";
+      document.getElementById("pin2").value = "1234";
+    }
+
+    function desbloquear(){
+      const sec = getSecurity();
+      if(!sec) return;
+
+      const pin = document.getElementById("unlockPin").value.trim();
+      if(hashPin(pin) !== sec.pinHash){
+        alert("PIN incorrecto.");
+        return;
+      }
+
+      setSession(true);
+      document.getElementById("securityOverlay").classList.add("hidden");
+      document.getElementById("unlockPin").value = "";
+    }
+
+    function toggleLock(){
+      setSession(false);
+      document.getElementById("securityOverlay").classList.remove("hidden");
+      initSecurity();
+    }
+
+    function cambiarPin(){
+      const sec = getSecurity();
+      if(!sec) return;
+
+      const actual = prompt("PIN actual:");
+      if(actual === null) return;
+
+      if(hashPin(actual.trim()) !== sec.pinHash){
+        alert("PIN actual incorrecto.");
+        return;
+      }
+
+      const nuevo = prompt("Nuevo PIN (4 a 8 dígitos):");
+      if(nuevo === null) return;
+
+      if(!/^[0-9]{4,8}$/.test(nuevo.trim())){
+        alert("PIN inválido.");
+        return;
+      }
+
+      const confirmar = prompt("Confirmar nuevo PIN:");
+      if(confirmar === null) return;
+
+      if(nuevo.trim() !== confirmar.trim()){
+        alert("Los PIN no coinciden.");
+        return;
+      }
+
+      sec.pinHash = hashPin(nuevo.trim());
+      setSecurity(sec);
+      alert("PIN actualizado.");
+    }
+
+    function getData(){
+      try{
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      }catch(e){
+        return [];
+      }
+    }
+
+    function setData(data, emit = true){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      if(emit) emitSync(data);
+    }
+
+
+    function getFoodData(){
+      try{
+        return JSON.parse(localStorage.getItem(FOOD_KEY)) || [];
+      }catch(e){
+        return [];
+      }
+    }
+
+    function setFoodData(data, emit = true){
+      localStorage.setItem(FOOD_KEY, JSON.stringify(data));
+      if(emit) emitFoodSync(data);
+    }
+
+    function cleanFoodText(value){
+      return String(value || "").trim().replace(/\s+/g, " ");
+    }
+
+    function normalizeFoodLower(value){
+      return cleanFoodText(value).toLowerCase();
+    }
+
+    function detectFoodSignals(comida, jugo){
+      const combined = `${normalizeFoodLower(comida)} ${normalizeFoodLower(jugo)}`.trim();
+      const signals = [];
+
+      if(!combined) return signals;
+
+      const hasAny = (terms) => terms.some(term => combined.includes(term));
+
+      if(hasAny(["dulce", "chocolate", "chocolatine", "m&m", "m&m’s", "m and m", "galleta dulce", "azúcar", "azucar", "aguapanela", "mango muy maduro", "uva"])) signals.push("azúcar");
+      if(hasAny(["sal", "salado", "frijol", "frijoles", "atun en lata", "atún en lata", "enlatado", "salsa", "embutido", "galletas"])) signals.push("sodio");
+      if(hasAny(["café", "cafe", "chocolate con leche"])) signals.push("estimulante");
+      if(hasAny(["zanahoria", "remolacha", "piña", "pina", "papaya", "linaza", "guayaba", "guanabana", "guanábana", "tomate de árbol", "tomate de arbol", "salmón", "salmon", "brocoli", "brócoli", "acelga", "espinaca"])) signals.push("protector");
+      return [...new Set(signals)];
+    }
+
+    function saveFoodEntry(persona, comida, jugo){
+      const comidaClean = cleanFoodText(comida);
+      const jugoClean = cleanFoodText(jugo);
+      if(!comidaClean && !jugoClean) return null;
+
+      const entry = {
+        id: Date.now() + Math.floor(Math.random() * 1000),
+        fechaISO: new Date().toISOString(),
+        fechaTexto: new Date().toLocaleString(),
+        persona,
+        comida: comidaClean || "-",
+        jugo: jugoClean || "-",
+        señales: detectFoodSignals(comidaClean, jugoClean)
+      };
+
+      const food = getFoodData();
+      food.unshift(entry);
+      setFoodData(food);
+      return entry;
+    }
+
+    function getFilteredFoodData(){
+      const filtro = document.getElementById("filtroPersona").value;
+      const data = getFoodData();
+      if(filtro === "TODOS") return data;
+      return data.filter(x => x.persona === filtro);
+    }
+
+    function getLatestFoodForPersona(persona){
+      return getFoodData().find(x => x.persona === persona) || null;
+    }
+
+    const planMama3Dias = [
+      {
+        dia:"Día 1",
+        desayuno:"Arepa de maíz + huevo cocido + papaya",
+        almuerzo:"Pollo + arroz normal en porción pequeña + acelga o brócoli",
+        cena:"Sopa de verduras + atún en agua o pollo desmenuzado",
+        jugo:"Zanahoria + remolacha sin azúcar"
+      },
+      {
+        dia:"Día 2",
+        desayuno:"Avena + banano pequeño o manzana",
+        almuerzo:"Salmón al vapor o en salsa casera con cebolla, tomate, pimentón, ajo, orégano y tomillo + papa o yuca en porción moderada + ensalada",
+        cena:"Espinaca o zucchini salteado con aceite de oliva + proteína ligera",
+        jugo:"Piña + papaya + linaza + sábila, sin azúcar"
+      },
+      {
+        dia:"Día 3",
+        desayuno:"Pan integral o arepa + huevo + guayaba o manzana",
+        almuerzo:"Frijoles con poca sal + arroz pequeño + pepino, lechuga y repollo",
+        cena:"Caldo o crema ligera de zapallo + pollo o hígado ocasional",
+        jugo:"Tomate de árbol o guanábana sin azúcar"
+      }
+    ];
+
+    function getPlanMamaIndex(){
+      let start = localStorage.getItem(PLAN_KEY);
+      if(!start){
+        start = String(Date.now());
+        localStorage.setItem(PLAN_KEY, start);
+      }
+      const days = Math.floor((Date.now() - Number(start)) / (1000 * 60 * 60 * 24));
+      return ((days % 3) + 3) % 3;
+    }
+
+    function renderPlanMama(){
+      const plan = planMama3Dias[getPlanMamaIndex()];
+      document.getElementById("planMamaDay").textContent = plan.dia;
+      document.getElementById("planMamaBreakfast").textContent = plan.desayuno;
+      document.getElementById("planMamaLunch").textContent = plan.almuerzo;
+      document.getElementById("planMamaDinner").textContent = plan.cena;
+      document.getElementById("planMamaJuice").textContent = plan.jugo;
+    }
+
+    function resetPlanMama(){
+      localStorage.setItem(PLAN_KEY, String(Date.now()));
+      renderPlanMama();
+      sendBrowserNotification("Plan Mamá reiniciado", "Se reinició el ciclo de comida de 3 días.");
+    }
+
+    function buildFoodAI(){
+      const data = getFilteredData();
+      const foodData = getFilteredFoodData();
+      const summaryEl = document.getElementById("foodAISummary");
+      const adviceEl = document.getElementById("foodAIAdvice");
+      const alertEl = document.getElementById("foodAIAlert");
+
+      if(!foodData.length){
+        summaryEl.textContent = "Todavía no hay suficientes registros de comida.";
+        adviceEl.textContent = "Recomendación: registra qué comió o qué jugo tomó.";
+        alertEl.textContent = "Alerta diaria: pendiente.";
+        return;
+      }
+
+      const latestFood = foodData[0];
+      const relatedPressure = data.find(x => x.persona === latestFood.persona) || data[0] || null;
+      const signals = latestFood.señales || [];
+      const sys = relatedPressure ? Number(relatedPressure.sys) : 0;
+      const dia = relatedPressure ? Number(relatedPressure.dia) : 0;
+
+      let summary = `Última comida registrada: ${latestFood.comida}. Bebida: ${latestFood.jugo}.`;
+      let advice = "Recomendación: mantener comida casera y poca sal.";
+      let alert = "Alerta diaria: hidratación y control normal.";
+
+      if(sys >= 160 || dia >= 100){
+        alert = "Alerta diaria: NO comer dulce ni sal fuerte hoy. Reposo, agua y repetir la toma.";
+        if(signals.includes("azúcar")){
+          advice = "La IA detecta posible disparo por azúcar. Cambiar dulce por papaya, manzana o porción pequeña de chocolate oscuro.";
+        } else if(signals.includes("sodio")){
+          advice = "La IA detecta posible exceso de sodio. Reducir frijoles salados, atún salado, galletas y comidas con salsa fuerte.";
+        } else if(signals.includes("estimulante")){
+          advice = "La IA detecta posible estímulo por café o chocolate. Limitar a 1 taza pequeña al día.";
+        } else {
+          advice = "Presión alta sin disparador claro. Comer ligero: pollo, salmón, verduras y jugo sin azúcar.";
+        }
+      } else if(sys >= 141 || dia >= 86){
+        alert = "Alerta diaria: vigilar porciones, usar poca sal y evitar repetir café o chocolate.";
+        advice = signals.includes("protector")
+          ? "Buena elección: esa comida tiene elementos protectores. Mantener sin azúcar añadida."
+          : "Preferir verduras, jugos sin azúcar, pollo o pescado, y porciones pequeñas de arroz.";
+      } else if(sys > 0){
+        advice = signals.includes("protector")
+          ? "La comida registrada luce favorable para la presión. Mantener constancia."
+          : "La lectura está controlada, pero conviene seguir evitando excesos de dulce, sal y café.";
+      }
+
+      summaryEl.textContent = summary;
+      adviceEl.textContent = advice;
+      alertEl.textContent = alert;
+    }
+
+    function maybeAlertFoodPressure(record, foodEntry){
+      if(!record) return;
+      let body = "";
+      if(record.sys >= 160 || record.dia >= 100){
+        body = "Evitar sal y dulces hoy. Dar agua y mantener reposo.";
+      } else if(record.sys >= 141 || record.dia >= 86){
+        body = "Vigilar porciones, café y sal. Repetir lectura en reposo.";
+      }
+
+      if(foodEntry && foodEntry.señales?.includes("azúcar")){
+        body += body ? " Posible disparo por azúcar." : "Posible disparo por azúcar.";
+      } else if(foodEntry && foodEntry.señales?.includes("sodio")){
+        body += body ? " Posible disparo por sodio." : "Posible disparo por sodio.";
+      }
+
+      if(body){
+        sendBrowserNotification(`Cuidado con ${record.persona}`, body);
+      }
+    }
+
+
+    function getSelectedSymptoms(){
+      return symptomBoxes().filter(b => b.checked).map(b => b.value);
+    }
+
+    function beep(type){
+      try{
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if(type === "bad") osc.frequency.value = 280;
+        else if(type === "warn") osc.frequency.value = 520;
+        else osc.frequency.value = 700;
+
+        gain.gain.value = 0.03;
+        osc.start();
+
+        if(type === "bad") setTimeout(() => osc.stop(), 450);
+        else setTimeout(() => osc.stop(), 180);
+      }catch(e){}
+    }
+
+    function speak(text){
+      if(!voiceEnabled) return;
+      if(!("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "es-US";
+      utter.rate = 1;
+      utter.pitch = 1;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function toggleVoice(){
+      voiceEnabled = !voiceEnabled;
+      document.getElementById("voiceBtnText").textContent = voiceEnabled ? "🔊 Voz: ON" : "🔇 Voz: OFF";
+    }
+
+    async function pedirNotificaciones(){
+      if(!("Notification" in window)){
+        alert("Este navegador no soporta notificaciones.");
+        return;
+      }
+      const permission = await Notification.requestPermission();
+      document.getElementById("notifyBtnText").textContent =
+        permission === "granted" ? "🔔 Notificaciones ON" : "🔕 Notificaciones OFF";
+    }
+
+    function sendBrowserNotification(title, body){
+      if(!("Notification" in window)) return;
+      if(Notification.permission !== "granted") return;
+      try{
+        new Notification(title, { body });
+      }catch(e){}
+    }
+
+    function clasificar(sys, dia, pul, sintomas){
+      const hasSymptoms = sintomas.length && !sintomas.includes("Sin síntomas");
+
+      if(sys >= 180 || dia >= 120){
+        return {
+          label:"🚨 URGENCIA",
+          cls:"bad",
+          msg:"Lectura extremadamente alta. Repetir en reposo y buscar atención médica.",
+          speak:"Atención. Lectura muy alta. Buscar ayuda médica.",
+          risk:"crítico"
+        };
+      }
+
+      if((sys >= 160 || dia >= 100) || (hasSymptoms && (sys >= 150 || dia >= 95))){
+        return {
+          label:"🔴 ALERTA",
+          cls:"bad",
+          msg:"Presión alta. Vigilar muy de cerca. Si se repite o hay síntomas, consultar médico.",
+          speak:"Alerta. La presión está alta. Vigilar y consultar si se repite.",
+          risk:"alto"
+        };
+      }
+
+      if(pul < 50){
+        return {
+          label:"🟠 PULSO BAJO",
+          cls:"warn",
+          msg:"Pulso bajo. Si hay mareo, debilidad o desmayo, consultar médico.",
+          speak:"Pulso bajo. Vigilar síntomas.",
+          risk:"medio"
+        };
+      }
+
+      if(sys < 95 || dia < 55){
+        return {
+          label:"🟠 PRESIÓN BAJA",
+          cls:"warn",
+          msg:"La presión está baja. Vigilar mareo, debilidad o malestar.",
+          speak:"La presión está baja. Vigilar síntomas.",
+          risk:"medio"
+        };
+      }
+
+      if((sys >= 141 && sys <= 159) || (dia >= 86 && dia <= 99) || (pul >= 91 && pul <= 110)){
+        return {
+          label:"🟡 VIGILAR",
+          cls:"warn",
+          msg:"La lectura está un poco fuera del rango cómodo. Conviene repetir en reposo.",
+          speak:"Lectura para vigilar. Repetir en reposo.",
+          risk:"moderado"
+        };
+      }
+
+      if((sys >= 130 && sys <= 140) && (dia >= 60 && dia <= 85) && (pul >= 55 && pul <= 90)){
+        return {
+          label:"🟢 CONTROLADA",
+          cls:"good",
+          msg:"Lectura estable y razonable para una persona mayor con tratamiento.",
+          speak:"La lectura está controlada.",
+          risk:"bajo"
+        };
+      }
+
+      if((sys >= 100 && sys < 130) && (dia >= 55 && dia < 85) && (pul >= 55 && pul <= 90)){
+        return {
+          label:"🟢 NORMAL",
+          cls:"good",
+          msg:"Todo en orden. La lectura luce bien.",
+          speak:"La lectura está normal.",
+          risk:"bajo"
+        };
+      }
+
+      return {
+        label:"🔵 REVISAR",
+        cls:"info",
+        msg:"Lectura fuera del patrón habitual. Conviene observar el promedio.",
+        speak:"Lectura para revisar.",
+        risk:"pendiente"
+      };
+    }
+
+    function setHospitalUI(result, sys, dia, pul){
+      const box = document.getElementById("hospitalBox");
+      const badge = document.getElementById("estadoBadge");
+      const reading = document.getElementById("readingText");
+      const msg = document.getElementById("messageText");
+
+      box.className = "hospital " + result.cls;
+      badge.className = "badge " + result.cls;
+      badge.textContent = result.label;
+      reading.textContent = `${sys} / ${dia} / ${pul}`;
+      msg.textContent = result.msg;
+    }
+
+    function processTrend(values){
+      if(values.length < 3) return "sin suficientes datos";
+      const last = values.slice(-3);
+      if(last[2] > last[1] && last[1] > last[0]) return "subiendo";
+      if(last[2] < last[1] && last[1] < last[0]) return "bajando";
+      return "estable";
+    }
+
+    function analizarPatrones(){
+      const data = getFilteredData().slice().reverse();
+      const aiSummary = document.getElementById("aiSummary");
+      const aiTrend = document.getElementById("aiTrend");
+      const aiRisk = document.getElementById("aiRisk");
+      const foodData = getFilteredFoodData();
+
+      if(data.length < 2){
+        aiSummary.textContent = "Aún no hay suficientes lecturas para detectar patrones.";
+        aiTrend.textContent = "Tendencia: pendiente.";
+        aiRisk.textContent = "Riesgo actual: pendiente.";
+        buildFoodAI();
+        return;
+      }
+
+      const avg = key => data.reduce((a,b)=>a + Number(b[key] || 0), 0) / data.length;
+      const avgSys = avg("sys");
+      const avgDia = avg("dia");
+      const avgPul = avg("pul");
+
+      const trendSys = processTrend(data.map(x => x.sys));
+      const trendDia = processTrend(data.map(x => x.dia));
+      const last5 = data.slice(-5);
+      const highCount = last5.filter(x => x.sys >= 150 || x.dia >= 95).length;
+      const lowCount = last5.filter(x => x.sys < 95 || x.dia < 55 || x.pul < 50).length;
+
+      let summary = `Promedio actual: SYS ${avgSys.toFixed(1)}, DIA ${avgDia.toFixed(1)}, Pulso ${avgPul.toFixed(1)}.`;
+      let trend = `Tendencia SYS: ${trendSys}. Tendencia DIA: ${trendDia}.`;
+      let risk = "Riesgo actual: bajo.";
+
+      if(highCount >= 3){
+        risk = "Riesgo actual: alto. Varias lecturas recientes han salido elevadas.";
+      } else if(lowCount >= 2){
+        risk = "Riesgo actual: moderado. Hay varias lecturas recientes bajas o con pulso bajo.";
+      } else if(avgSys >= 141 || avgDia >= 86){
+        risk = "Riesgo actual: moderado. El promedio se está saliendo del rango cómodo.";
+      }
+
+      const latestFood = foodData[0];
+      if(latestFood){
+        const signs = (latestFood.señales || []).join(", ");
+        if(signs){
+          summary += ` Última comida con señales detectadas: ${signs}.`;
+        }
+      }
+
+      aiSummary.textContent = summary;
+      aiTrend.textContent = trend;
+      aiRisk.textContent = risk;
+      buildFoodAI();
+    }
+
+    function procesarLectura(){
+      let persona = document.getElementById("persona").value;
+
+      if(persona === "__nuevo__"){
+        const nuevoNombre = document.getElementById("nuevoFamiliar").value.trim();
+        if(!nuevoNombre){
+          alert("Escribe el nombre del nuevo familiar.");
+          return;
+        }
+        persona = addFamily(nuevoNombre);
+      }
+
+      const edad = Number(document.getElementById("edad").value || 0);
+      const sys = Number(document.getElementById("sys").value);
+      const dia = Number(document.getElementById("dia").value);
+      const pul = Number(document.getElementById("pul").value);
+      const sintomas = getSelectedSymptoms();
+      const comida = document.getElementById("comida").value;
+      const jugo = document.getElementById("jugo").value;
+
+      if(!persona || !sys || !dia || !pul){
+        alert("Completa persona, SYS, DIA y pulso.");
+        return;
+      }
+
+      const result = clasificar(sys, dia, pul, sintomas);
+      setHospitalUI(result, sys, dia, pul);
+
+      const record = {
+        id: Date.now(),
+        fechaISO: new Date().toISOString(),
+        fechaTexto: new Date().toLocaleString(),
+        persona,
+        edad,
+        sys,
+        dia,
+        pul,
+        sintomas: sintomas.join(", ") || "Sin síntomas",
+        estado: result.label,
+        cls: result.cls,
+        risk: result.risk
+      };
+
+      const data = getData();
+      data.unshift(record);
+      setData(data);
+      const foodEntry = saveFoodEntry(persona, comida, jugo);
+      renderTodo();
+
+      beep(result.cls);
+      speak(`${persona}. ${result.speak}. Sistólica ${sys}. Diastólica ${dia}. Pulso ${pul}.`);
+
+      if(result.cls === "bad" || result.cls === "warn"){
+        sendBrowserNotification(
+          `Lectura ${result.label}`,
+          `${persona}: ${sys}/${dia}, pulso ${pul}. ${result.msg}`
+        );
+      }
+
+      maybeAlertFoodPressure(record, foodEntry);
+
+      document.getElementById("sys").value = "";
+      document.getElementById("dia").value = "";
+      document.getElementById("pul").value = "";
+      document.getElementById("comida").value = "";
+      document.getElementById("jugo").value = "";
+      document.getElementById("nuevoFamiliar").value = "";
+      symptomBoxes().forEach(x => x.checked = false);
+      renderFamilySelects(persona);
+    }
+
+
+    function guardarComidaManual(){
+      let persona = document.getElementById("persona").value;
+      if(persona === "__nuevo__"){
+        const nuevoNombre = document.getElementById("nuevoFamiliar").value.trim();
+        if(!nuevoNombre){
+          alert("Escribe el nombre del nuevo familiar.");
+          return;
+        }
+        persona = addFamily(nuevoNombre);
+      }
+
+      const comida = document.getElementById("comida").value;
+      const jugo = document.getElementById("jugo").value;
+      const entry = saveFoodEntry(persona, comida, jugo);
+
+      if(!entry){
+        alert("Escribe una comida o bebida para guardar.");
+        return;
+      }
+
+      renderTodo();
+      sendBrowserNotification("Comida registrada", `${persona}: ${entry.comida} / ${entry.jugo}`);
+      document.getElementById("comida").value = "";
+      document.getElementById("jugo").value = "";
+      renderFamilySelects(persona);
+    }
+
+    function getFilteredData(){
+      const filtro = document.getElementById("filtroPersona").value;
+      const data = getData();
+      if(filtro === "TODOS") return data;
+      return data.filter(x => x.persona === filtro);
+    }
+
+    function renderTabla(){
+      const tbody = document.getElementById("tablaHistorial");
+      const data = getFilteredData();
+
+      if(!data.length){
+        tbody.innerHTML = `<tr><td colspan="9">Sin registros</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = data.map(r => `
+        <tr>
+          <td>${r.fechaTexto}</td>
+          <td>${r.persona}</td>
+          <td>${r.edad || "-"}</td>
+          <td>${r.sys}</td>
+          <td>${r.dia}</td>
+          <td>${r.pul}</td>
+          <td>${r.sintomas}</td>
+          <td><span class="pill ${r.cls}">${r.estado}</span></td>
+          <td><button class="red" style="padding:8px 10px;font-size:12px" onclick="eliminarRegistro(${r.id})">Eliminar</button></td>
+        </tr>
+      `).join("");
+    }
+
+
+    function renderTablaComidas(){
+      const tbody = document.getElementById("tablaComidas");
+      const data = getFilteredFoodData();
+
+      if(!data.length){
+        tbody.innerHTML = `<tr><td colspan="6">Sin registros</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = data.map(r => `
+        <tr>
+          <td>${r.fechaTexto}</td>
+          <td>${r.persona}</td>
+          <td>${r.comida}</td>
+          <td>${r.jugo}</td>
+          <td>${(r.señales || []).join(", ") || "-"}</td>
+          <td><button class="red" style="padding:8px 10px;font-size:12px" onclick="eliminarComida(${r.id})">Eliminar</button></td>
+        </tr>
+      `).join("");
+    }
+
+    function eliminarComida(id){
+      const data = getFoodData().filter(x => x.id !== id);
+      setFoodData(data);
+      renderTodo();
+    }
+
+    function eliminarRegistro(id){
+      const data = getData().filter(x => x.id !== id);
+      setData(data);
+      renderTodo();
+    }
+
+    function actualizarStats(){
+      const data = getFilteredData();
+      const avg = (arr, key) => arr.length ? (arr.reduce((a,b)=>a + Number(b[key] || 0),0) / arr.length).toFixed(1) : "0";
+
+      document.getElementById("avgSys").textContent = avg(data, "sys");
+      document.getElementById("avgDia").textContent = avg(data, "dia");
+      document.getElementById("avgPul").textContent = avg(data, "pul");
+      document.getElementById("countReads").textContent = data.length;
+    }
+
+    function drawChart(){
+      const canvas = document.getElementById("chart");
+      const ctx = canvas.getContext("2d");
+      const width = canvas.width;
+      const height = canvas.height;
+      const pad = 50;
+
+      ctx.clearRect(0,0,width,height);
+
+      const limit = Number(document.getElementById("limitGraph").value || 12);
+      const data = getFilteredData().slice(0, limit).reverse();
+
+      ctx.fillStyle = "#0a1628";
+      ctx.fillRect(0,0,width,height);
+
+      const chartTop = pad;
+      const chartBottom = height - pad;
+      const chartLeft = pad;
+      const chartRight = width - pad;
+      const chartHeight = chartBottom - chartTop;
+
+      function yFor(value, minVal, maxVal){
+        return chartTop + ((maxVal - value) / (maxVal - minVal)) * chartHeight;
+      }
+
+      const minVal = 30;
+      const maxVal = 220;
+
+      ctx.fillStyle = "rgba(22,163,74,.10)";
+      ctx.fillRect(chartLeft, yFor(130, minVal, maxVal), chartRight-chartLeft, yFor(55, minVal, maxVal)-yFor(130, minVal, maxVal));
+
+      ctx.fillStyle = "rgba(245,158,11,.08)";
+      ctx.fillRect(chartLeft, yFor(160, minVal, maxVal), chartRight-chartLeft, yFor(130, minVal, maxVal)-yFor(160, minVal, maxVal));
+
+      ctx.fillStyle = "rgba(239,68,68,.08)";
+      ctx.fillRect(chartLeft, yFor(220, minVal, maxVal), chartRight-chartLeft, yFor(160, minVal, maxVal)-yFor(220, minVal, maxVal));
+
+      ctx.strokeStyle = "rgba(255,255,255,.08)";
+      ctx.lineWidth = 1;
+      for(let i=0;i<6;i++){
+        const y = chartTop + (chartHeight/5)*i;
+        ctx.beginPath();
+        ctx.moveTo(chartLeft, y);
+        ctx.lineTo(chartRight, y);
+        ctx.stroke();
+
+        const val = Math.round(maxVal - ((maxVal-minVal)/5)*i);
+        ctx.fillStyle = "#9fc2ea";
+        ctx.font = "12px Arial";
+        ctx.fillText(val, 10, y+4);
+      }
+
+      if(!data.length){
+        ctx.fillStyle = "#9fc2ea";
+        ctx.font = "16px Arial";
+        ctx.fillText("Sin datos para graficar", chartLeft, height/2);
+        return;
+      }
+
+      const drawSeries = (key, label, color) => {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+
+        data.forEach((d, i) => {
+          const x = chartLeft + (i * ((chartRight-chartLeft) / Math.max(1, data.length-1)));
+          const y = yFor(d[key], minVal, maxVal);
+          if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+        });
+        ctx.stroke();
+
+        data.forEach((d, i) => {
+          const x = chartLeft + (i * ((chartRight-chartLeft) / Math.max(1, data.length-1)));
+          const y = yFor(d[key], minVal, maxVal);
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(x, y, 4, 0, Math.PI*2);
+          ctx.fill();
+        });
+
+        ctx.fillStyle = color;
+        ctx.font = "13px Arial";
+        const legendY = label === "SYS" ? 20 : label === "DIA" ? 40 : 60;
+        ctx.fillText(label, width - 110, legendY);
+      };
+
+      drawSeries("sys", "SYS", "#38bdf8");
+      drawSeries("dia", "DIA", "#f59e0b");
+      drawSeries("pul", "PULSO", "#22c55e");
+
+      ctx.fillStyle = "#9fc2ea";
+      ctx.font = "12px Arial";
+      data.forEach((d, i) => {
+        const x = chartLeft + (i * ((chartRight-chartLeft) / Math.max(1, data.length-1)));
+        ctx.fillText(String(i+1), x-3, height-12);
+      });
+    }
+
+    function notificarUltimaLectura(){
+      const data = getData();
+      if(!data.length){
+        alert("No hay lecturas guardadas.");
+        return;
+      }
+      const last = data[0];
+      sendBrowserNotification(
+        `Última lectura: ${last.persona}`,
+        `${last.sys}/${last.dia}, pulso ${last.pul} - ${last.estado}`
+      );
+    }
+
+    function exportarJSON(){
+      const payload = {
+        pressure: getData(),
+        food: getFoodData(),
+        families: getFamilies(),
+        exportedAt: new Date().toISOString(),
+        version: "v3-ai-integrated"
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "techblue-pressure-care-data.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function importarJSON(){
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".json,application/json";
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          try{
+            const imported = JSON.parse(reader.result);
+
+            if(Array.isArray(imported)){
+              setData(imported);
+              renderTodo();
+              alert("Lecturas importadas.");
+              return;
+            }
+
+            if(imported && typeof imported === "object"){
+              if(Array.isArray(imported.pressure)) setData(imported.pressure);
+              if(Array.isArray(imported.food)) setFoodData(imported.food);
+              if(Array.isArray(imported.families) && imported.families.length) setFamilies(imported.families);
+              renderFamilySelects();
+              renderFamilyManager();
+              renderTodo();
+              alert("Datos importados.");
+              return;
+            }
+
+            throw new Error("Formato inválido");
+          }catch(err){
+            alert("No se pudo importar ese JSON.");
+          }
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    }
+
+    function borrarTodo(){
+      if(!confirm("¿Seguro que quieres borrar todo el historial?")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(FOOD_KEY);
+      renderTodo();
+
+      const result = {
+        label:"ESPERANDO DATOS",
+        cls:"info",
+        msg:"Ingrese los datos del brazalete para analizar la lectura."
+      };
+      setHospitalUI(result, "--", "--", "--");
+    }
+
+    function usarEjemploMama(){
+      renderFamilySelects("Mamá");
+      document.getElementById("persona").value = "Mamá";
+      document.getElementById("edad").value = "75";
+      document.getElementById("sys").value = "137";
+      document.getElementById("dia").value = "63";
+      document.getElementById("pul").value = "61";
+      document.getElementById("comida").value = "Pollo con arroz y acelga";
+      document.getElementById("jugo").value = "Zanahoria + remolacha";
+      symptomBoxes().forEach(x => x.checked = false);
+      symptomNone().checked = true;
+      toggleNuevoFamiliarField();
+    }
+
+    function usarEjemploTia(){
+      renderFamilySelects("Tía Gladys");
+      document.getElementById("persona").value = "Tía Gladys";
+      document.getElementById("edad").value = "78";
+      document.getElementById("sys").value = "122";
+      document.getElementById("dia").value = "62";
+      document.getElementById("pul").value = "56";
+      document.getElementById("comida").value = "Salmón con verduras";
+      document.getElementById("jugo").value = "Piña + papaya";
+      symptomBoxes().forEach(x => x.checked = false);
+      symptomNone().checked = true;
+      toggleNuevoFamiliarField();
+    }
+
+    function emitSync(data){
+      try{
+        if(channel){
+          channel.postMessage({ type:"sync-data", payload:data });
+        }
+      }catch(e){}
+    }
+
+    function emitFoodSync(data){
+      try{
+        if(channel){
+          channel.postMessage({ type:"sync-food", payload:data });
+        }
+      }catch(e){}
+    }
+
+    function initSync(){
+      try{
+        channel = new BroadcastChannel(CHANNEL_NAME);
+        channel.onmessage = (event) => {
+          if(event.data?.type === "sync-data"){
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(event.data.payload || []));
+            renderTodo();
+          }
+          if(event.data?.type === "sync-food"){
+            localStorage.setItem(FOOD_KEY, JSON.stringify(event.data.payload || []));
+            renderTodo();
+          }
+        };
+      }catch(e){}
+
+      window.addEventListener("storage", (e) => {
+        if(e.key === STORAGE_KEY || e.key === FAMILY_KEY || e.key === FOOD_KEY || e.key === PLAN_KEY){
+          renderFamilySelects();
+          renderFamilyManager();
+          renderTodo();
+        }
+      });
+    }
+
+    function renderTodo(){
+      renderTabla();
+      renderTablaComidas();
+      actualizarStats();
+      drawChart();
+      analizarPatrones();
+      renderPlanMama();
+      document.getElementById("familyCountLabel").textContent = getFamilies().length;
+    }
+
+    renderFamilySelects();
+    renderFamilyManager();
+    initSecurity();
+    initSync();
+    renderTodo();
+
+    if("Notification" in window){
+      document.getElementById("notifyBtnText").textContent =
+        Notification.permission === "granted" ? "🔔 Notificaciones ON" : "🔔 Notificaciones";
+    }
+  </script>
+</body>
+</html>
