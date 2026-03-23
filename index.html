@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1670,13 +1671,63 @@
         Notification.permission === "granted" ? "🔔 Notificaciones ON" : "🔔 Notificaciones";
     }
   </script>
-  <a href="privacy.html">Privacy</a> |
-  <a href="ai-integration.html">AI Integration</a> |
-  <a href="terms.html">Terms</a> |
-  <a href="about.html">About</a> |
-  <a href="contact.html">Contact</a> |
-  <a href="guias.html">Guías</a>
+  
+<div class="footer-wrap">
+  <footer style="
+    margin-top:40px;
+    border:1px solid rgba(89,170,255,.2);
+    border-radius:20px;
+    padding:20px;
+    background:linear-gradient(180deg,#0b1730,#071120);
+    box-shadow:0 0 20px rgba(31,139,255,.25);
+    text-align:center;
+  ">
+    <div style="margin-bottom:15px;font-weight:bold;color:#7dd3fc;">
+      ⚡ Tech Blue Navigation
+    </div>
+
+    <div class="footer-links">
+      <a href="privacy.html">Privacy</a>
+      <a href="AI Integration.html">AI Integration</a>
+      <a href="terms.html">Terms</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="guias.html">Guías</a>
+    </div>
+
+    <div style="margin-top:15px;font-size:12px;color:#9fc2ea;">
+      © 2026 Tech Blue
+    </div>
+  </footer>
 </div>
+
+<style>
+.footer-links a{
+  display:inline-block;
+  padding:14px 22px;
+  margin:6px;
+  font-size:16px;
+  font-weight:800;
+  color:#eaf2ff;
+  text-decoration:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#1f8bff,#4ac3ff);
+  box-shadow:0 0 12px rgba(31,139,255,.5);
+  transition:0.3s;
+}
+.footer-links a:hover{
+  transform:scale(1.08);
+  box-shadow:0 0 20px rgba(74,195,255,.9);
+}
+@media (max-width:600px){
+  .footer-links a{
+    display:block;
+    width:90%;
+    margin:10px auto;
+  }
+}
+</style>
+
 
 </body>
 </html>
